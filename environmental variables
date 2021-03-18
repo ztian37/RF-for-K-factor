@@ -1,0 +1,51 @@
+///////////// topography ////////////////
+var srtm = ee.Image("CGIAR/SRTM90_V4");
+    
+var DOI = srtm.clip(geometry);
+
+Map.addLayer(DOI, {min:1,max:5500},'srtm'); 
+
+Export.image.toDrive({
+  image:DOI, 
+  description:"Taihu_srtm_90m", 
+  folder:"Taihu", 
+  region:geometry, 
+  scale:90, 
+  maxPixels: 3818977076,
+  });
+  
+  
+////////////////////////// MODIS visible light///////////////////////////////
+var MOD6 = ee.ImageCollection("MODIS/006/MOD13Q1").filterDate('2016-01-01', '2021-01-01');
+
+var mean = MOD6.mean().multiply(0.0001).clip(geometry);
+var max = MOD6.max().multiply(0.0001).clip(geometry);
+var sd = MOD6.reduce(ee.Reducer.stdDev()).multiply(0.0001).clip(geometry);
+
+var NDVI=mean.select("NDVI");
+var NDVI1=max.select("NDVI");
+var NDVI2=sd.select("NDVI_stdDev");
+var EVI=mean.select("EVI");
+var EVI1=max.select("EVI");
+var EVI2=sd.select("EVI_stdDev");
+
+var b1=mean.select("sur_refl_b01"); // red
+var b2=mean.select("sur_refl_b02"); // NIR
+var b3=mean.select("sur_refl_b03"); // blue
+var b7=mean.select("sur_refl_b07"); // MIR
+
+Map.addLayer(NDVI, {min: -0.1, max: 1},'ndvi');
+Map.addLayer(NDVI1, {min: 0.3, max: 1},'ndviMax');
+Map.addLayer(NDVI2, {min: 0, max: 0.25},'ndviSD');
+Map.addLayer(EVI, {min: -0.1, max: 0.5},'evi');
+Map.addLayer(EVI1, {min: -0.1, max: 0.5},'eviMax');
+Map.addLayer(EVI2, {min: -0.1, max: 0.5},'eviSD');
+Map.addLayer(mean.select('sur_refl_b03','sur_refl_b02','sur_refl_b01'),{min: 0, max: 0.8},"color");
+
+Export.image.toDrive({
+  image:b7, 
+  description:"Taihu_MIR_250m", 
+  folder:"Taihu", 
+  region:geometry, 
+  scale:250, 
+  });
