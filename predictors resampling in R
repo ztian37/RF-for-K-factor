@@ -1,0 +1,143 @@
+# load library
+library(raster)
+
+# read rasters
+# climate with 1 km resolution
+MAP <- raster("MAP.tif")
+MAT <- raster("MAT.tif")
+Isothermality <- raster("Isothermality.tif")
+MaxPrecipitation <- raster("MaxPrecipitation.tif")
+MaxTemperature <- raster("MaxTemperature.tif")
+MeanDiurnalRange <- raster("MeanDiurnalRange.tif")
+MinPrecipitation <- raster("MinPrecipitation.tif")
+MinTemperature <- raster("MinTemperature.tif")
+PrecipitationColdestQuarter <- raster("PrecipitationColdestQuarter.tif")
+PrecipitationDriestQuarter <- raster("PrecipitationDriestQuarter.tif")
+PrecipitationSeasonality <- raster("PrecipitationSeasonality.tif")
+PrecipitationWarmestQuarter <- raster("PrecipitationWarmestQuarter.tif")
+PrecipitationWettestQuarter <- raster("PrecipitationWettestQuarter.tif")
+TemperatureColdestQuarter <- raster("TemperatureColdestQuarter.tif")
+TemperatureDriestQuarter <- raster("TemperatureDriestQuarter.tif")
+TemperatureRange <- raster("TemperatureRange.tif")
+TemperatureSeasonality <- raster("TemperatureSeasonality.tif")
+TemperatureWarmestQuarter <- raster("TemperatureWarmestQuarter.tif")
+TemperatureWettestQuarter <- raster("TemperatureWettestQuarter.tif")
+
+# vegetation with 250 m resolution
+NDVI <- raster("NDVI.tif")
+NDVImax <- raster("NDVImax.tif")
+NDVIsd <- raster("NDVIsd.tif")
+EVI <- raster("EVI.tif")
+EVImax <- raster("EVImax.tif")
+EVIsd <- raster("EVIsd.tif")
+
+# topography with 90 m resolution
+Elevation <- raster("Elevation.tif")
+slope <- raster("slope.tif")
+aspect <- raster("aspect.tif")
+hillshade <- raster("hillshade.tif")
+curpln <- raster("curpln.tif")
+curprf <- raster("curprf.tif")
+
+# LST with 1 km resolution
+day12 <- raster("day12.tif")
+day11 <- raster("day11.tif")
+day10 <- raster("day10.tif")
+day09 <- raster("day09.tif")
+day08 <- raster("day08.tif")
+day07 <- raster("day07.tif")
+day06 <- raster("day06.tif")
+day05 <- raster("day05.tif")
+day04 <- raster("day04.tif")
+day03 <- raster("day03.tif")
+day02 <- raster("day02.tif")
+day01 <- raster("day01.tif")
+night12 <- raster("night12.tif")
+night11 <- raster("night11.tif")
+night10 <- raster("night10.tif")
+night09 <- raster("night09.tif")
+night08 <- raster("night08.tif")
+night07 <- raster("night07.tif")
+night06 <- raster("night06.tif")
+night05 <- raster("night05.tif")
+night04 <- raster("night04.tif")
+night03 <- raster("night03.tif")
+night02 <- raster("night02.tif")
+night01 <- raster("night01.tif")
+
+# optical spetrum with 250 m resolution
+blue <- raster("blue.tif")
+red <- raster("red.tif")
+NIR <- raster("NIR.tif")
+MIR <- raster("MIR.tif")
+
+# SAR with 250 m resolution
+VV <- raster("VV.tif")
+VH <- raster("VH.tif")
+HV <- raster("HV.tif")
+HH <- raster("HH.tif")
+
+# resampling
+# resample for climate
+MAP <- resample(MAP,NDVI)
+MAT <- resample(MAT,NDVI)
+Isothermality <- resample(Isothermality,NDVI)
+MaxPrecipitation <- resample(MaxPrecipitation,NDVI)
+MaxTemperature <- resample(MaxTemperature,NDVI)
+MeanDiurnalRange <- resample(MeanDiurnalRange,NDVI)
+MinPrecipitation <- resample(MinPrecipitation,NDVI)
+MinTemperature <- resample(MinTemperature,NDVI)
+PrecipitationColdestQuarter <- resample(PrecipitationColdestQuarter,NDVI)
+PrecipitationDriestQuarter <- resample(PrecipitationDriestQuarter,NDVI)
+PrecipitationSeasonality <- resample(PrecipitationSeasonality,NDVI)
+PrecipitationWarmestQuarter <- resample(PrecipitationWarmestQuarter,NDVI)
+PrecipitationWettestQuarter <- resample(PrecipitationWettestQuarter,NDVI)
+TemperatureColdestQuarter <- resample(TemperatureColdestQuarter,NDVI)
+TemperatureDriestQuarter <- resample(TemperatureDriestQuarter,NDVI)
+TemperatureRange <- resample(TemperatureRange,NDVI)
+TemperatureSeasonality <- resample(TemperatureSeasonality,NDVI)
+TemperatureWarmestQuarter <- resample(TemperatureWarmestQuarter,NDVI)
+TemperatureWettestQuarter <- resample(TemperatureWettestQuarter,NDVI)
+
+# resample for topography
+Elevation <- resample(Elevation,NDVI)
+slope <- resample(slope,NDVI)
+aspect <- resample(aspect,NDVI)
+hillshade <- resample(hillshade,NDVI)
+curpln <- resample(curpln,NDVI)
+curprf <- resample(curprf,NDVI)
+
+# resample for LST
+day12 <- resample(day12,NDVI)
+day11 <- resample(day11,NDVI)
+day10 <- resample(day10,NDVI)
+day09 <- resample(day09,NDVI)
+day08 <- resample(day08,NDVI)
+day07 <- resample(day07,NDVI)
+day06 <- resample(day06,NDVI)
+day05 <- resample(day05,NDVI)
+day04 <- resample(day04,NDVI)
+day03 <- resample(day03,NDVI)
+day02 <- resample(day02,NDVI)
+day01 <- resample(day01,NDVI)
+night12 <- resample(night12,NDVI)
+night11 <- resample(night11,NDVI)
+night10 <- resample(night10,NDVI)
+night09 <- resample(night09,NDVI)
+night08 <- resample(night08,NDVI)
+night07 <- resample(night07,NDVI)
+night06 <- resample(night06,NDVI)
+night05 <- resample(night05,NDVI)
+night04 <- resample(night04,NDVI)
+night03 <- resample(night03,NDVI)
+night02 <- resample(night02,NDVI)
+night01 <- resample(night01,NDVI)
+
+
+
+
+
+
+
+
+
