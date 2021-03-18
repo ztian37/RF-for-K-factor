@@ -25,17 +25,56 @@ rasValue <- extract(Bana, point, method="bilinear")
 PointValue <- cbind(point,rasValue)
 write.table(PointValue,file="PointValue.csv", append=FALSE, sep=",", row.names=FALSE, col.names=TRUE) 
 
-# Read the sampling data
-taihu <- read.csv("envi_factors2019.csv")
 
 ###################   Random Forest  #######################
-# Build regression
-taihu <- na.omit(taihu)
-rf0 <- randomForest((K)~., data=taihu, ntree=500, mtry=2, importance=TRUE, proximity=TRUE)
-rf0$importance
+# Read the sampling data
+taihu <- read.csv("envi_factors.csv")
 
 # Tunning parameters
+# cross validation 
+# Tune the optimal mtry parameter
+# define training control
+control <- trainControl(method="repeatedcv", number=5, repeats=100, search="random")
+# train the model
+model <- train((K)~., data=taihu, method="rf", ntree=500, tuneGrid = data.frame(mtry = c(1,2,8,16,32,63)), trControl=control)
+# summarize results
+print(model)
+model$results
+
+# Tune the optimal ntree parameter
+control <- trainControl(method="repeatedcv", number=5, repeats=100, search="random")
+rf_random1 <- train((K)~., data=taihu, method="rf", tuneGrid = data.frame(mtry = c(1:63)), ntree=300, trControl=control) # tuneLength=63
+print(rf_random1)
+plot(rf_random1)
+rf_random2 <- train((K)~., data=taihu, method="rf", tuneGrid = data.frame(mtry = c(1:63)), ntree=500, trControl=control) # tuneLength=63
+print(rf_random2)
+plot(rf_random2)
+rf_random3 <- train((K)~., data=taihu, method="rf", tuneGrid = data.frame(mtry = c(1:63)), ntree=700, trControl=control) # tuneLength=63
+print(rf_random3)
+plot(rf_random3)
+rf_random4 <- train((K)~., data=taihu, method="rf", tuneGrid = data.frame(mtry = c(1:63)), ntree=750, trControl=control) # tuneLength=63
+print(rf_random4)
+plot(rf_random4)
+rf_random5 <- train((K)~., data=taihu, method="rf", tuneGrid = data.frame(mtry = c(1:63)), ntree=800, trControl=control) # tuneLength=63
+print(rf_random5)
+plot(rf_random5)
+rf_random6 <- train((K)~., data=taihu, method="rf", tuneGrid = data.frame(mtry = c(1:63)), ntree=1000, trControl=control) # tuneLength=63
+print(rf_random6)
+plot(rf_random6)
+
+# Build the optimized regression model
+taihu <- na.omit(taihu)
+rf0 <- randomForest((K)~., data=taihu, ntree=500, mtry=2, importance=TRUE, proximity=TRUE)
+# out-of-bag error
+rf0$mse #RMSE
+rf0$rsq #R2
+        #MAE
+
+
+# rank the importance of environmental variables
+rf0$importance
+
+# uncertainty analysis
 ranger_fit <- ranger(K ~ ., data = taihu, num.trees = 500, mtry = 2, seed=1, keep.inbag=TRUE)
 ranger_fit
-
 
