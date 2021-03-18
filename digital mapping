@@ -1,0 +1,18 @@
+# load library
+library(raster)
+library(randomForest)
+
+# read the sampling data
+taihu <- read.csv("envi_factors.csv")
+taihu <- na.omit(taihu)
+
+# build the model
+rf0 <- randomForest((K)~., data=taihu, ntree=500, mtry=2, importance=TRUE, proximity=TRUE)
+rf0
+
+# Predict raster
+forest_prob <- raster::predict(rf0, object=ApPl_stack, interval="confidence", level=0.95) 
+plot(forest_prob)
+
+# save the predictions
+writeRaster(forest_prob,'randomForest4K.tif', overwrite=TRUE)
