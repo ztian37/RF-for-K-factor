@@ -134,10 +134,13 @@ night02 <- resample(night02,NDVI)
 night01 <- resample(night01,NDVI)
 
 
-
-
-
-
-
-
-
+# stack all environmental variables
+ApPl_stack <- stack(MAP,MAT,Isothermality,MaxPrecipitation,MaxTemperature,MeanDiurnalRange,MinPrecipitation,
+                    MinTemperature,PrecipitationColdestQuarter,PrecipitationDriestQuarter,PrecipitationSeasonality,
+                    PrecipitationWarmestQuarter,PrecipitationWettestQuarter,TemperatureColdestQuarter,TemperatureDriestQuarter,
+                    TemperatureRange,TemperatureSeasonality,TemperatureWarmestQuarter,TemperatureWettestQuarter,
+                    Elevation,slope,aspect,hillshade,curprf,curpln,
+                    NDVI,NDVImax,NDVIsd,EVI,EVImax,EVIsd,blue,red,NIR,MIR,
+                    day12,day11,day10,day09,day08,day07,day06,day05,day04,day03,day02,day01,
+                    night12,night11,night10,night09,night08,night07,night06,night05,night04,night03,night02,night01,
+                    VV,VH,HV,HH)
