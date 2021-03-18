@@ -1,0 +1,41 @@
+# Load library
+library(MASS)
+library(caret)
+library(raster)
+library(randomForest)
+library(ranger)
+library(rfinterval)
+
+# Read point data
+point <- read.csv("pointfile.csv")
+coordinates(point) <- ~ LATITUDE + LONGITUDE //convert them into spatial points data frame
+crs(point) <- crs(MAT)
+
+# Read predictors raster file
+path <- "C:/Users/z/Documents/R/Taihu"
+f <- list.files(path=path, pattern='tif$', full.names=TRUE)
+environment <- lapply(f, raster)
+r <- stack(environment)
+
+# Extract raster value by points
+Bana <- readAll(r)  
+rasValue <- extract(Bana, point, method="bilinear") 
+
+# Combine raster values with point and save as a CSV file
+PointValue <- cbind(point,rasValue)
+write.table(PointValue,file="PointValue.csv", append=FALSE, sep=",", row.names=FALSE, col.names=TRUE) 
+
+# Read the sampling data
+taihu <- read.csv("envi_factors2019.csv")
+
+###################   Random Forest  #######################
+# Build regression
+taihu <- na.omit(taihu)
+rf0 <- randomForest((K)~., data=taihu, ntree=500, mtry=2, importance=TRUE, proximity=TRUE)
+rf0$importance
+
+# Tunning parameters
+ranger_fit <- ranger(K ~ ., data = taihu, num.trees = 500, mtry = 2, seed=1, keep.inbag=TRUE)
+ranger_fit
+
+
