@@ -67,9 +67,9 @@ plot(rf_random6)
 # Build the optimized regression model
 rf0 <- randomForest((K)~., data=taihu, ntree=500, mtry=2, importance=TRUE, proximity=TRUE)
 # out-of-bag error
-rf0$mse #RMSE
-rf0$rsq #R2
-        #MAE
+mean(sqrt(rf0$mse)) # RMSE
+mean(rf0$rsq) # R2
+mean((abs(taihu$K-rf0$predicted))) # MAE
 
 # the importance of environmental variables
 rf0$importance
