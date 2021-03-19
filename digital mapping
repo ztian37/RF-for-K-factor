@@ -16,3 +16,20 @@ plot(forest_prob)
 
 # save the predictions
 writeRaster(forest_prob,'randomForest4K.tif', overwrite=TRUE)
+
+# uncertainty analysis
+pred <- rfinterval(Ks~., train_data = taihu, test_data = v1,
+                 method = c("oob"), # "split-conformal", "quantreg"
+                 symmetry = TRUE,alpha = 0.10) # 90% prediction interval
+lower <- c(pred$oob_interval$lower)
+upper <- c(pred$oob_interval$upper)
+
+r_lower <- raster(nrow=4237, ncol=3138, ext=extent(115.8043, 122.8502, 23.07993, 32.59267), crs="+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0")
+values(r_lower) <- lower
+plot(r_lower)
+writeRaster(r_lower,'randomForestLower.tif', overwrite=TRUE)
+
+r_upper <- raster(nrow=4237, ncol=3138, ext=extent(115.8043, 122.8502, 23.07993, 32.59267), crs="+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0")
+values(r_upper) <- upper
+plot(r_upper)
+writeRaster(r_upper,'randomForestUpper.tif', overwrite=TRUE)
