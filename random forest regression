@@ -29,6 +29,8 @@ write.table(PointValue,file="PointValue.csv", append=FALSE, sep=",", row.names=F
 ###################   Random Forest  #######################
 # Read the sampling data
 taihu <- read.csv("envi_factors.csv")
+taihu <- na.omit(taihu)
+str(taihu)
 
 # Tunning parameters
 # cross validation 
@@ -63,18 +65,12 @@ print(rf_random6)
 plot(rf_random6)
 
 # Build the optimized regression model
-taihu <- na.omit(taihu)
 rf0 <- randomForest((K)~., data=taihu, ntree=500, mtry=2, importance=TRUE, proximity=TRUE)
 # out-of-bag error
 rf0$mse #RMSE
 rf0$rsq #R2
         #MAE
 
-
 # rank the importance of environmental variables
+rf0 <- randomForest((K)~., data=taihu, ntree=500, mtry=2, importance=TRUE, proximity=TRUE)
 rf0$importance
-
-# uncertainty analysis
-ranger_fit <- ranger(K ~ ., data = taihu, num.trees = 500, mtry = 2, seed=1, keep.inbag=TRUE)
-ranger_fit
-
